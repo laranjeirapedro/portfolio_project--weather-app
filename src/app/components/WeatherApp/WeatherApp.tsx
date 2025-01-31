@@ -2,15 +2,26 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Sunrise from "@/public/sunrise-icon.png";
+import Sunset from "@/public/sunset-icon.png";
 import { FaSearch } from "react-icons/fa";
 
 type WeatherData = {
   location: {
     name: string;
     country: string;
+    region: string;
   };
   current: {
     temp_c: number;
+    condition: {
+      text: string;
+      icon: string;
+    };
+    feelslike_c: number;
+    wind_kph: number;
+    wind_dir: string;
+    last_updated: string;
   };
 };
 
@@ -34,10 +45,10 @@ export const WeatherApp = () => {
   useEffect(() => {
     if (!query) return;
 
-    const getData = async () => {
+    const getQueryData = async () => {
       try {
         const res = await fetch(
-          `http://api.weatherapi.com/v1/current.json?key=${process.env.NEXT_PUBLIC_WEATHER_API}&q=${query}&aqi=no`
+          `http://api.weatherapi.com/v1/forecast.json?key=${process.env.NEXT_PUBLIC_WEATHER_API}&q=${query}&days=10&aqi=yes&alerts=yes`
         );
         const json = await res.json();
         setWeather(json);
@@ -46,8 +57,17 @@ export const WeatherApp = () => {
       }
     };
 
-    getData();
+    getQueryData();
   }, [query]);
+
+  const rawDate = weather?.current?.last_updated;
+  const formattedDate = rawDate
+    ? new Intl.DateTimeFormat("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      }).format(new Date(rawDate))
+    : "";
 
   return (
     <div className="w-full">
@@ -97,7 +117,7 @@ export const WeatherApp = () => {
                   </p>
                   <div>
                     <p>
-                      <b>Wind:</b> {weather.current?.wind_kph}kph <br/>
+                      <b>Wind:</b> {weather.current?.wind_kph} kph <br />
                       <b>Direction:</b> {weather.current?.wind_dir}
                     </p>
                   </div>
@@ -106,12 +126,52 @@ export const WeatherApp = () => {
               <p className="pt-6 text-left text-xs">
                 Updated:
                 <br />
-                {weather.current?.last_updated}
+                {formattedDate}
               </p>
+            </div>
+          </div>
+          <div>
+            <h1>Details</h1>
+            <div className="flex flex-row">
+              <div className="p-4 flex flex-row space-x-4 border-2 border-black rounded-md shadow-3xl">
+                <div>
+                  <Image
+                    src={Sunrise}
+                    alt="sunrise-icon"
+                    width={50}
+                    height={50}
+                  />
+                  Sunrise:
+                  <h1 className="text-lg font-bold">
+                    {weather.forecast?.forecastday[0].astro.sunrise}
+                  </h1>
+                </div>
+                <div className="text-right">
+                  <Image
+                    className="justify-self-end"
+                    src={Sunset}
+                    alt="sunrise-icon"
+                    width={50}
+                    height={50}
+                  />
+                  Sunset:
+                  <h1 className="text-lg font-bold">
+                    {weather.forecast?.forecastday[0].astro.sunset}
+                  </h1>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       )}
+      {/* {weather && weather.forecast && (
+        <div>
+          <h1>{formattedDate}</h1>
+          <h1>{weather.forecast?.forecastday[0].day.maxtemp_c}</h1>
+          <h1>{weather.forecast?.forecastday[0].day.mintemp_c}</h1>
+          <h1>{weather.forecast?.forecastday[0].day.mintemp_c}</h1>
+        </div>
+      )} */}
     </div>
   );
 };
