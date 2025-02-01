@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Logo from "@/public/SkyWatch_Logo.png";
 import Sunrise from "@/public/sunrise-icon.png";
 import Sunset from "@/public/sunset-icon.png";
+import Wind from "@/public/wind-icon.png";
 import { FaSearch } from "react-icons/fa";
 
 type WeatherData = {
@@ -70,28 +72,29 @@ export const WeatherApp = () => {
     : "";
 
   return (
-    <div className="w-full">
-      <div className="w-full">
-        <form
-          onSubmit={inputSubmit}
-          className="w-full relative flex justify-center"
-        >
-          <input
-            value={location}
-            onChange={getLocation}
-            type="text"
-            placeholder="Search your Address, City or Postal Code"
-            className="p-2 px-16 w-2/5 h-10 rounded-md"
-          />
-          {/* <FaSearch className="absolute translate-x-[-350px] top-2.5 text-xl"/> */}
-          <button className="mx-4 px-4 border-solid border-2 border-black rounded-md">
-            Search
-          </button>
-        </form>
+    <div className="w-full flex flex-col items-center mt-8">
+      <div className="w-full flex flex-row items-center m-4 ml-16 space-x-6">
+        <div className="ml-32">
+          <Image src={Logo} alt="logo" width={150} height={150} />
+        </div>
+        <div className="w-full">
+          <form onSubmit={inputSubmit} className="w-full relative flex">
+            <input
+              value={location}
+              onChange={getLocation}
+              type="text"
+              placeholder="Search your Address, City or Postal Code"
+              className="p-2 px-16 w-2/5 h-10 rounded-md"
+            />
+            {/* <FaSearch className="absolute translate-x-[-350px] top-2.5 text-xl"/> */}
+            <button className="mx-4 px-4 border-solid border-2 border-black rounded-md">
+              Search
+            </button>
+          </form>
+        </div>
       </div>
       {weather && weather.location && (
         <div>
-          <h4 className="text-center mt-4">Recent Places</h4>
           <div className="flex justify-center">
             <div className="py-2 px-6 mt-4 text-center border-2 bg-white rounded-md">
               <h4 className="text-2xl font-bold">
@@ -132,8 +135,8 @@ export const WeatherApp = () => {
           </div>
           <div>
             <h1>Details</h1>
-            <div className="flex flex-row">
-              <div className="p-4 flex flex-row space-x-4 border-2 border-black rounded-md shadow-3xl">
+            <div className="flex flex-row space-x-8">
+              <div className="min-w-56 p-4 flex flex-row space-x-4 border-2 border-black rounded-md shadow-3xl">
                 <div>
                   <Image
                     src={Sunrise}
@@ -146,6 +149,45 @@ export const WeatherApp = () => {
                     {weather.forecast?.forecastday[0].astro.sunrise}
                   </h1>
                 </div>
+                <div className="text-right">
+                  <Image
+                    className="justify-self-end"
+                    src={Sunset}
+                    alt="sunrise-icon"
+                    width={50}
+                    height={50}
+                  />
+                  Sunset:
+                  <h1 className="text-lg font-bold">
+                    {weather.forecast?.forecastday[0].astro.sunset}
+                  </h1>
+                </div>
+              </div>
+              <div className="min-w-56 p-4 flex flex-col space-x-4 border-2 border-black rounded-md shadow-3xl">
+                <div className="flex flex-row justify-between">
+                  <div className="flex flex-col">
+                    <b>Wind:</b>
+                    <p className="text-lg">
+                      <b>{weather.current?.wind_kph}</b> km/h
+                    </p>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Image
+                      src={Wind}
+                      alt="sunrise-icon"
+                      width={30}
+                      height={30}
+                    />
+                    <p className="">
+                      <b>{weather.current?.wind_dir}</b>
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <p><b>Gust: </b>{weather.current?.gust_kph} km/h</p>
+                </div>
+              </div>
+              <div className="min-w-56 p-4 flex flex-col space-x-4 border-2 border-black rounded-md shadow-3xl">
                 <div className="text-right">
                   <Image
                     className="justify-self-end"
