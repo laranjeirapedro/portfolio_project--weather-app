@@ -71,7 +71,7 @@ export const WeatherApp = () => {
         );
         const json = await res.json();
         setWeather(json);
-      } catch (error) {
+      } catch {
         alert("Location not found. Please try again!");
       }
     };
