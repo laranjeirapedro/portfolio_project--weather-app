@@ -67,7 +67,7 @@ export const WeatherApp = () => {
     const getQueryData = async () => {
       try {
         const res = await fetch(
-          `http://api.weatherapi.com/v1/forecast.json?key=${process.env.NEXT_PUBLIC_WEATHER_API}&q=${query}&days=10&aqi=yes&alerts=yes`
+          `https://api.weatherapi.com/v1/forecast.json?key=${process.env.NEXT_PUBLIC_WEATHER_API}&q=${query}&days=10&aqi=yes&alerts=yes`
         );
         const json = await res.json();
         setWeather(json);
