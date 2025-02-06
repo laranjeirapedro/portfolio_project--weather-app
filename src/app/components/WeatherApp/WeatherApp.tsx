@@ -120,7 +120,7 @@ export const WeatherApp = () => {
               <h4 className="text-2xl font-bold">{weather.location.country}</h4>
               <div className="mt-4 flex flex-row items-center justify-center">
                 <div className="flex flex-row items-center justify-center">
-                  <Image
+                  <img
                     src={`https://${weather.current.condition.icon}`}
                     alt="weather-icon"
                     width={60}
