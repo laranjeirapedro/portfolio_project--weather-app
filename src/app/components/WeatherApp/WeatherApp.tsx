@@ -36,9 +36,7 @@ export const WeatherApp = () => {
 
     const getData = async () => {
       try {
-        const res = await fetch(
-          `http://api.weatherapi.com/v1/current.json?key=${process.env.NEXT_PUBLIC_WEATHER_API}&q=${query}&aqi=no`
-        );
+        const res = await fetch(`http://localhost:5066/api/weather/${query}`);
         const json = await res.json();
         setWeather(json);
       } catch (error) {
@@ -97,7 +95,7 @@ export const WeatherApp = () => {
                   </p>
                   <div>
                     <p>
-                      <b>Wind:</b> {weather.current?.wind_kph}kph <br/>
+                      <b>Wind:</b> {weather.current?.wind_kph}kph <br />
                       <b>Direction:</b> {weather.current?.wind_dir}
                     </p>
                   </div>
