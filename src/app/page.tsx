@@ -1,10 +1,10 @@
-import { Header, WeatherApp } from "./components"
+import { WeatherApp } from "./components"
 
 export default function Home() {
   return (
-    <div>
-      <Header />
+    <div className="w-full h-screen bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/bg2.png')" }}>
       <WeatherApp />
     </div>
   );
 }
+
