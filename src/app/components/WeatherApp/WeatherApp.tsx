@@ -34,20 +34,51 @@ type WeatherData = {
     dewpoint_c: number;
     precip_mm: number;
   };
-  forecast:{
+  forecast: {
     forecastday: {
       astro: {
         sunrise: string;
         sunset: string;
-      }
-    }[]
-  }
+      };
+    }[];
+  };
 };
 
 export const WeatherApp = () => {
   const [location, setLocation] = useState("");
   const [query, setQuery] = useState("");
   const [weather, setWeather] = useState<WeatherData | null>(null);
+  const [chatInput, setChatInput] = useState("");
+  const [chatResponse, setChatResponse] = useState("");
+
+  const sendMessage = async (message: string) => {
+    try {
+      const res = await fetch("/api/dialogflow", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setChatResponse(data.reply);
+        console.log("Chatbot response:", data.reply);
+      } else {
+        console.error("Error from API:", data.error);
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
+  };
+
+  const handleChatSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (chatInput.trim()) {
+      sendMessage(chatInput);
+      setChatInput("");
+    }
+  };
 
   const getLocation = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLocation(e.target.value);
@@ -303,6 +334,27 @@ export const WeatherApp = () => {
           </div>
         </div>
       )}
+      <div className="mt-8 p-4 border rounded bg-gray-100">
+        <h2 className="text-lg font-bold">Weather Chatbot</h2>
+        <form onSubmit={handleChatSubmit} className="flex mt-2">
+          <input
+            type="text"
+            value={chatInput}
+            onChange={(e) => setChatInput(e.target.value)}
+            placeholder="Ask me about the weather..."
+            className="flex-grow p-2 border rounded"
+          />
+          <button
+            type="submit"
+            className="ml-2 p-2 bg-blue-500 text-white rounded"
+          >
+            Send
+          </button>
+        </form>
+        {chatResponse && (
+          <p className="mt-4 p-2 bg-white border rounded">{chatResponse}</p>
+        )}
+      </div>
     </div>
   );
 };
