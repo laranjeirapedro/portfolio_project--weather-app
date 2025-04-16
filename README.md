@@ -1,3 +1,4 @@
+![App screenshot](./public/assets/app=thumbnail.webp)
 # 🌦️ SkyWatch - Weather App  
 
 **SkyWatch** is a weather forecast application built with **Next.js** and **Tailwind CSS**, leveraging the [WeatherAPI.com](https://www.weatherapi.com/) to provide real-time weather data. The app displays essential weather details, including temperature, wind speed, humidity, sunrise and sunset times, and more.  
